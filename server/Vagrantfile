@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "puphpet/debian75-x64"
+
+  config.vm.provision "shell", inline: <<-SHELL
+    # Install mongoDB
+    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+    echo 'deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+    sudo apt-get update
+    sudo apt-get install -y mongodb-org-server
+    sudo sed -i 's/bind_ip/#bind_ip/g' /etc/mongod.conf
+    sudo service mongod restart
+  SHELL
+
+  config.vm.network "forwarded_port", guest: 27017, host: 27017
+end
