@@ -1,0 +1,14 @@
+{
+  "name": "educraft-editor-server",
+  "version": "1.0.0",
+  "description": "Server of the web editor for EduCraft.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maik Marschner <an@maik.tk>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
