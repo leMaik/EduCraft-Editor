@@ -1,5 +1,3 @@
-passportLocalMongoose = require 'passport-local-mongoose'
-
 module.exports = (mongoose) ->
   snippet =
     name:
