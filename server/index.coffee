@@ -22,6 +22,7 @@ process.on 'SIGINT', gracefulShutdown
 
 mongoose = require 'mongoose'
 mongoose.connect 'mongodb://localhost:27017/educraft'
+mongoose.connection.on 'open', (con) -> mongoose.connection.db.dropDatabase()
 models = require('./models/models')(mongoose)
 
 session = require 'express-session'
@@ -29,32 +30,35 @@ passport = require 'passport'
 MongoStore = require('connect-mongo')(session)
 bcrypt = require 'bcrypt'
 
-LocalStrategy = require('passport-local').Strategy
-passport.use new LocalStrategy {
-  usernameField: 'username'
-  passwordField: 'password'
-}, (username, password, done) ->
-  models.User.findOne(email: username)
-  .then (user) ->
-    if user?
-      bcrypt.compare password, user.hash, (err, same) ->
-        if !err and same
-          done(null, user)
-        else
-          done(null, false)
-    else
-      done(null, false)
-  .catch -> done(null, false)
+config = require './config.json'
+
+BdApiStrategy = require('passport-bdapi').Strategy
+passport.use new BdApiStrategy {
+    apiURL: config.oauth.apiUrl,
+    clientID: config.oauth.clientId,
+    clientSecret: config.oauth.clientSecret,
+    callbackURL: config.oauth.callbackUrl
+  }, (accessToken, refreshToken, profile, done) ->
+    models.User.findOne { oauthId: "cf-#{profile.user_id}" }, (err, user) ->
+      if user
+        user.username = profile.username
+        user.save (err) -> done(err, user)
+      else
+        models.User.create
+          oauthId: "cf-#{profile.user_id}"
+          username: profile.username
+        .then (user) -> done(null, user)
+        .then null, (err) -> done(err, null)
 
 passport.serializeUser (user, done) -> done(null, user._id)
 
 passport.deserializeUser (id, done) ->
   models.User.findById(id)
   .then (user) -> done(null, user)
-  .catch -> done(null, false)
+  .then null, -> done(true, null)
 
 app.use session
-  secret: process.env.SECRET
+  secret: config.session.secret
   resave: false
   saveUninitialized: false
   cookie:
@@ -75,19 +79,16 @@ app.use '/api', (req, res, next) ->
   else
     next()
 
-app.post '/register', (req, res) ->
-  models.User.register new models.User(username: req.body.username), req.body.password, (err, account) ->
-    if (err)
-      res.status(500).send('Registration failed')
-    else
-      passport.authenticate('local')(req, res, -> res.redirect('/'))
+app.get '/auth/example', passport.authenticate('oauth2')
 
-app.post '/login', passport.authenticate('local'), (req, res) ->
-  res.redirect '/'
+app.get '/auth/example/callback', passport.authenticate('oauth2', failureRedirect: '/'), (req, res) ->
+  res.redirect('/')
+
+app.get '/api/me', (req, res) -> res.json(req.user).end()
 
 app.post '/logout', (req, res) ->
   req.logout()
-  req.redirect '/'
+  res.redirect '/'
 
 app.get '/modules/:username/:module', (req, res) ->
   models.User.findOne(username: req.params.username)

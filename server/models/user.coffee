@@ -11,10 +11,8 @@ module.exports = (mongoose) ->
       required: true
 
   userSchema = mongoose.Schema
+    oauthId: String
     username: String
-    password: String
     snippets: [snippet]
-
-  userSchema.plugin passportLocalMongoose
 
   mongoose.model 'User', userSchema
