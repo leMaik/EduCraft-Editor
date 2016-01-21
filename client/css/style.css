@@ -1,17 +1,21 @@
 html {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 *, *:before, *:after {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding: 20px;
 }
 
 #editor {
-  width: 100%;
-  min-height: 500px;
+    width: 100%;
+    min-height: 500px;
 }

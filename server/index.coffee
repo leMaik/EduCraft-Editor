@@ -1,7 +1,7 @@
 express = require 'express'
 
 app = express()
-app.use express.static '../client/dist'
+app.use express.static '../client'
 
 server = app.listen 3000, ->
   console.log "Listening on port #{server.address().port}"
