@@ -1,6 +1,9 @@
 import {Component, OnInit} from 'angular2/core';
-import {UserMenuItemComponent} from './user-menu-item.component'
-import {UserService} from './user.service'
+import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
+import {UserMenuItemComponent} from './user-menu-item.component';
+import {UserService} from './user.service';
+import {Home} from './home';
+import {Login} from './login';
 
 @Component({
     selector: 'educraft-editor',
@@ -10,10 +13,15 @@ import {UserService} from './user.service'
 
     <user-menu-item [user]="user" class="right menu"></user-menu-item>
 </div>
+<router-outlet></router-outlet>
 `,
-    directives: [UserMenuItemComponent],
+    directives: [UserMenuItemComponent, ROUTER_DIRECTIVES],
     providers: [UserService]
 })
+@RouteConfig([
+    {path: '/', component: Home},
+    {path: '/login', component: Login}
+])
 export class AppComponent implements OnInit {
     public user = null;
 

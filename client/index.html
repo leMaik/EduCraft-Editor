@@ -12,6 +12,11 @@
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
+
+    <script src="node_modules/ace-builds/src-min-noconflict/ace.js"></script>
+    <script src="node_modules/ace-builds/src-min-noconflict/mode-lua.js"></script>
+    <script src="node_modules/ace-builds/src-min-noconflict/theme-chrome.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css"
@@ -27,7 +32,8 @@
                     format: 'register',
                     defaultExtension: 'js'
                 }
-            }
+            },
+            paths: {}
         });
         System.import('app/boot').then(null, console.error.bind(console));
     </script>
