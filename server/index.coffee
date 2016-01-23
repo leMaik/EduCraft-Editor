@@ -22,7 +22,7 @@ process.on 'SIGINT', gracefulShutdown
 
 mongoose = require 'mongoose'
 mongoose.connect 'mongodb://localhost:27017/educraft'
-mongoose.connection.on 'open', (con) -> mongoose.connection.db.dropDatabase()
+#mongoose.connection.on 'open', (con) -> mongoose.connection.db.dropDatabase()
 models = require('./models/models')(mongoose)
 
 session = require 'express-session'
@@ -80,9 +80,7 @@ app.use '/api', (req, res, next) ->
     next()
 
 app.get '/auth/example', passport.authenticate('oauth2', scope: 'read')
-
-app.get '/auth/example/callback', passport.authenticate('oauth2', failureRedirect: '/'), (req, res) ->
-  res.redirect('/')
+app.get '/auth/example/callback', passport.authenticate('oauth2', failureRedirect: '/'), -> res.redirect('/')
 
 app.get '/api/me', (req, res) -> res.json(req.user).end()
 
