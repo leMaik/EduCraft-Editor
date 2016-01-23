@@ -79,7 +79,7 @@ app.use '/api', (req, res, next) ->
   else
     next()
 
-app.get '/auth/example', passport.authenticate('oauth2')
+app.get '/auth/example', passport.authenticate('oauth2', scope: 'read')
 
 app.get '/auth/example/callback', passport.authenticate('oauth2', failureRedirect: '/'), (req, res) ->
   res.redirect('/')
