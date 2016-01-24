@@ -89,10 +89,11 @@ app.get '/api/modules', (req, res) ->
   res.json(req.user.snippets).end()
 
 app.post '/api/modules', (req, res) ->
-  req.user.snippets.push name: req.body.name, code: req.body.code, lastModified: new Date()
+  module = name: req.body.name, code: req.body.code, lastModified: new Date()
+  req.user.snippets.push module
   req.user.markModified 'snippets'
   req.user.save()
-  .then -> res.status(204).end()
+  .then -> res.json(module).end()
   .then null, -> res.status(500).end()
 
 app.post '/logout', (req, res) ->

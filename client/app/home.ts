@@ -12,19 +12,15 @@ import {ModuleService} from "./module.service";
             <div class="ui segment">
                 <div class="ui list">
                     <div class="item">
-                        <i class="folder icon"></i>
+                        <i class="edit icon"></i>
                         <div class="content">
-                            <div class="header">public</div>
-                            <div class="description">Your public EduCraft modules</div>
-                            <div class="list">
-                                <div class="item">
-                                    <i class="file icon"></i>
-                                    <div class="content">
-                                        <div class="header">awesome-module</div>
-                                        <div class="description">Updated 21 mins ago</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a class="header" (click)="createModule()">New module&hellip;</a>
+                        </div>
+                    </div>
+                    <div class="item" *ngFor="#module of modules">
+                        <i class="file icon"></i>
+                        <div class="content">
+                            <a class="header">{{module.name}}</a>
                         </div>
                     </div>
                 </div>
@@ -77,6 +73,7 @@ import {ModuleService} from "./module.service";
 export class Home {
     public isLoggedIn:boolean = false;
     public user;
+    public modules;
     public moduleName:string = '';
     public moduleCode:string = '';
 
@@ -85,6 +82,7 @@ export class Home {
             this.user = user;
             this.isLoggedIn = user != null
         });
+        _moduleService.getModules().subscribe(modules => this.modules = modules);
     }
 
     login(provider:string) {
@@ -93,7 +91,9 @@ export class Home {
 
     save() {
         if (/[0-9A-Za-z\-]+/.test(this.moduleName)) {
-            this._moduleService.createModule(this.moduleName, this.moduleCode).subscribe(() => alert('Saved!'));
+            this._moduleService.createModule(this.moduleName, this.moduleCode).subscribe(module => {
+                this.modules.push(module);
+            });
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
         }

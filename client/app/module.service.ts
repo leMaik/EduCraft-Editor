@@ -16,7 +16,7 @@ export class ModuleService {
         headers.append('Content-Type', 'application/json');
         return this._http.post('/api/modules', JSON.stringify({name: module, code: code}), {
             headers: headers
-        });
+        }).map(module => module.json());
     }
 
     updateModule(module:string, code:string) {
