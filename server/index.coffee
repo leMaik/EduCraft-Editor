@@ -89,7 +89,7 @@ app.get '/api/modules', (req, res) ->
   res.json(req.user.snippets).end()
 
 app.post '/api/modules', (req, res) ->
-  req.user.snippets.push name: req.body.name, code: req.body.code
+  req.user.snippets.push name: req.body.name, code: req.body.code, lastModified: new Date()
   req.user.markModified 'snippets'
   req.user.save()
   .then -> res.status(204).end()
@@ -106,10 +106,12 @@ app.get '/modules/:username/:module', (req, res) ->
       snippet = user.snippets.find (s) -> s.name == req.params.module
 
       if snippet
-        res.set 'Content-Type', 'text/plain'
+        res.set
+          'Content-Type': 'text/x-lua'
+          'Last-Modified': snippet.lastModified.toUTCString()
         res.send new Buffer """
 -- #{req.params.username}/#{req.params.module}
--- Retrieved on: #{new Date().toISOString()}
+-- Last modified: #{snippet.lastModified.toUTCString()}
 
 #{snippet.code}
 """
@@ -117,6 +119,6 @@ app.get '/modules/:username/:module', (req, res) ->
         res.status(404).send()
     else
       res.status(404).send()
-  , (err) ->
+  .then null, (err) ->
     console.log err
     res.status(500)

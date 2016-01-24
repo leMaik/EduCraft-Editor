@@ -7,6 +7,8 @@ module.exports = (mongoose) ->
     code:
       type: String
       required: true
+    lastModified:
+      type: Date
 
   userSchema = mongoose.Schema
     oauthId: String
