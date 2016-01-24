@@ -1,6 +1,7 @@
 import {Component} from 'angular2/core';
 import {AceEditor} from './ace';
 import {UserService} from "./user.service";
+import {ModuleService} from "./module.service";
 
 @Component({
     selector: 'home',
@@ -30,8 +31,21 @@ import {UserService} from "./user.service";
             </div>
         </div>
         <div class="twelve wide column">
-            <div class="ui segment">
-                <div ace-editor></div>
+            <div class="ui segments">
+                <div class="ui clearing segment">
+                    <div class="ui fluid labeled action input">
+                        <div class="ui basic label">
+                            {{user.username}}/
+                        </div>
+                        <input type="text" placeholder="module-name" [(ngModel)]="moduleName">
+                        <div class="ui icon button" (click)="save()">
+                            <i class="ui save icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div ace-editor (contentChange)="moduleCode=$event"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -62,12 +76,26 @@ import {UserService} from "./user.service";
 })
 export class Home {
     public isLoggedIn:boolean = false;
+    public user;
+    public moduleName:string = '';
+    public moduleCode:string = '';
 
-    constructor(private _userService:UserService) {
-        _userService.getUser().subscribe(user => this.isLoggedIn = user != null);
+    constructor(private _userService:UserService, private _moduleService:ModuleService) {
+        _userService.getUser().subscribe(user => {
+            this.user = user;
+            this.isLoggedIn = user != null
+        });
     }
 
     login(provider:string) {
         location.href = '/auth/' + provider;
+    }
+
+    save() {
+        if (/[0-9A-Za-z\-]+/.test(this.moduleName)) {
+            this._moduleService.createModule(this.moduleName, this.moduleCode).subscribe(() => alert('Saved!'));
+        } else {
+            alert('Only alphanumeric characters are allowed for the module name.');
+        }
     }
 }

@@ -4,6 +4,7 @@ import {UserMenuItemComponent} from './user-menu-item.component';
 import {UserService} from './user.service';
 import {Home} from './home';
 import {Login} from './login';
+import {ModuleService} from "./module.service";
 
 @Component({
     selector: 'educraft-editor',
@@ -16,7 +17,7 @@ import {Login} from './login';
 <router-outlet></router-outlet>
 `,
     directives: [UserMenuItemComponent, ROUTER_DIRECTIVES],
-    providers: [UserService]
+    providers: [UserService, ModuleService]
 })
 @RouteConfig([
     {path: '/', component: Home},

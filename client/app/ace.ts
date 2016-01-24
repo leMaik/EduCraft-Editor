@@ -1,5 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
-import {ElementRef, Directive, EventEmitter} from 'angular2/core';
+import {ElementRef, Directive, EventEmitter, Output} from 'angular2/core';
 
 @Directive({
     selector: '[ace-editor]',
@@ -11,7 +11,7 @@ export class AceEditor {
     editor;
 
     /** When the markdown content changes we broadcast the entire document. */
-    contentChange:EventEmitter<string> = new EventEmitter();
+    @Output() contentChange:EventEmitter<string> = new EventEmitter();
 
     constructor(elementRef:ElementRef) {
         // Note the constructor doesn't have access to any data from properties
@@ -35,7 +35,6 @@ export class AceEditor {
             // Discard the delta (e), and provide whole document
             this.contentChange.emit(this.editor.getValue());
         });
-
     }
 
     set content(text) {
