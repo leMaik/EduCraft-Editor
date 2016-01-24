@@ -16,6 +16,7 @@ module.exports = (mongoose) ->
       required: true
     username:
       type: String
+      unique: true
       required: true
     snippets: [snippet]
 
