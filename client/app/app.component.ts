@@ -9,12 +9,14 @@ import {ModuleService} from "./module.service";
 @Component({
     selector: 'educraft-editor',
     template: `
-<div class="ui menu">
-    <a class="active item">EduCraft</a>
+<div class="ui container">
+    <div class="ui inverted blue menu">
+        <a class="item">EduCraft Web Editor</a>
 
-    <user-menu-item [user]="user" class="right menu"></user-menu-item>
+        <user-menu-item [user]="user" class="right menu"></user-menu-item>
+    </div>
+    <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>
 `,
     directives: [UserMenuItemComponent, ROUTER_DIRECTIVES],
     providers: [UserService, ModuleService]

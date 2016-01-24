@@ -6,22 +6,39 @@ import {Module} from "./module";
 
 @Component({
     selector: 'home',
+    styles: [`
+.list .active.item {
+    color: #2185d0!important;
+}
+
+.modules {
+    padding: 0;
+}
+
+.modules .item {
+    padding: 1rem;
+}
+`],
     template: `
 <div class="ui grid" *ngIf="isLoggedIn">
     <div class="row">
         <div class="four wide column">
-            <div class="ui segment">
-                <div class="ui list">
-                    <div class="item">
-                        <i class="edit icon"></i>
-                        <div class="content">
-                            <a class="header" (click)="newModule()">New module&hellip;</a>
-                        </div>
+            <div class="ui fluid blue basic button" (click)="newModule()">
+                <i class="ui edit icon"></i>
+                New module&hellip;
+            </div>
+            <div style="margin-top:1rem">
+                <h5 class="ui top attached header">
+                    Modules
+                </h5>
+                <div class="ui bottom attached segment modules">
+                    <div class="ui center aligned basic segment" *ngIf="modules.length==0">
+                        Use the editor to create your very first module.
                     </div>
-                    <div class="item" *ngFor="#m of modules">
-                        <i class="file icon"></i>
-                        <div class="content">
-                            <a class="header" (click)="module=m">{{m.name}}</a>
+                    <div class="ui list" *ngIf="modules.length>0">
+                        <div class="item" *ngFor="#m of modules" (click)="module=m" style="cursor:pointer" [ngClass]="{active: m==module}">
+                            <i class="code icon"></i>
+                            <div class="content">{{m.name}}</div>
                         </div>
                     </div>
                 </div>
@@ -62,7 +79,7 @@ import {Module} from "./module";
 export class Home {
     public isLoggedIn:boolean = false;
     public user;
-    public modules:Module[];
+    public modules:Module[] = [];
     public module:Module;
 
     constructor(private _userService:UserService, private _moduleService:ModuleService) {

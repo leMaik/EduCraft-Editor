@@ -7,14 +7,14 @@ import {Module} from "./module";
     selector: 'module-editor',
     inputs: ['module'],
     template: `
-<div class="ui segments">
+<div class="ui piled segments">
     <div class="ui clearing segment">
         <div class="ui fluid labeled action input">
             <div class="ui basic label">
                 {{user.username}}/
             </div>
             <input type="text" placeholder="module-name" [(ngModel)]="name">
-            <div class="ui icon button" (click)="save()">
+            <div class="ui icon button" (click)="save()" [ngClass]="{disabled: !modified}">
                 <i class="ui save icon"></i>
             </div>
         </div>
@@ -28,8 +28,9 @@ import {Module} from "./module";
 })
 export class ModuleEditor {
     public user = {};
-    private name:string;
+    private initialName:string;
     private initialCode:string;
+    private name:string;
     private code:string;
     @Output() moduleSaved:EventEmitter<Module> = new EventEmitter();
 
@@ -48,8 +49,13 @@ export class ModuleEditor {
     }
 
     set module(module:Module) {
-        this.name = module != null ? module.name : '';
+        this.initialName = module != null ? module.name : '';
         this.initialCode = module != null ? module.code : '';
+        this.name = this.initialName;
         this.code = this.initialCode;
+    }
+
+    get modified() {
+        return this.code != this.initialCode || this.name != this.initialName;
     }
 }
