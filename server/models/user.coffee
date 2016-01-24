@@ -2,7 +2,6 @@ module.exports = (mongoose) ->
   snippet =
     name:
       type: String
-      unique: true
       required: true
     code:
       type: String
@@ -11,8 +10,13 @@ module.exports = (mongoose) ->
       type: Date
 
   userSchema = mongoose.Schema
-    oauthId: String
-    username: String
+    oauthId:
+      type: String
+      unique: true
+      required: true
+    username:
+      type: String
+      required: true
     snippets: [snippet]
 
   mongoose.model 'User', userSchema
