@@ -89,11 +89,38 @@ app.get '/api/modules', (req, res) ->
   res.json(req.user.snippets).end()
 
 app.post '/api/modules', (req, res) ->
-  module = name: req.body.name, code: req.body.code, lastModified: new Date()
-  req.user.snippets.push module
+  if !req.user.snippets.find((s) -> s.name == req.body.name)?
+    module = name: req.body.name, code: req.body.code, lastModified: new Date()
+    req.user.snippets.push module
+    req.user.markModified 'snippets'
+    req.user.save()
+    .then -> res.json(module).end()
+    .then null, -> res.status(500).end()
+  else
+    res.status(409).end()
+
+app.put '/api/modules/:module', (req, res) ->
+  module = req.user.snippets.find (s) -> s.name == req.params.module
+  renamedModule = req.user.snippets.find (s) -> s.name == req.body.name
+  if module
+    if !renamedModule? or module == renamedModule
+      module.name = req.body.name
+      module.code = req.body.code
+      module.lastModified = new Date()
+      req.user.markModified 'snippets'
+      req.user.save()
+      .then -> res.json(module).end()
+      .then null, -> res.status(500).end()
+    else
+      res.status(409).end()
+  else
+    res.status(404).end()
+
+app.delete '/api/modules/:module', (req, res) ->
+  req.user.snippets = req.user.snippets.filter (s) -> s.name != req.params.module
   req.user.markModified 'snippets'
   req.user.save()
-  .then -> res.json(module).end()
+  .then -> res.status(204).end()
   .then null, -> res.status(500).end()
 
 app.post '/logout', (req, res) ->

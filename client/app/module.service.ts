@@ -1,5 +1,6 @@
 import {Injectable,Inject} from 'angular2/core'
 import {HTTP_PROVIDERS, Http, Headers} from 'angular2/http'
+import {Observable} from 'rxjs';
 import 'rxjs/operator/map';
 
 @Injectable()
@@ -19,12 +20,12 @@ export class ModuleService {
         }).map(module => module.json());
     }
 
-    updateModule(module:string, code:string) {
+    updateModule(existingModule:string, module:string, code:string) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this._http.put('/api/modules/' + module, JSON.stringify({code: code}), {
+        return this._http.put('/api/modules/' + existingModule, JSON.stringify({name: module, code: code}), {
             headers: headers
-        });
+        }).map(module => module.json());
     }
 
     deleteModule(module:string) {

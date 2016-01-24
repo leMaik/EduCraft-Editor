@@ -1,7 +1,8 @@
 import {Component} from 'angular2/core';
-import {AceEditor} from './ace';
 import {UserService} from "./user.service";
 import {ModuleService} from "./module.service";
+import {ModuleEditor} from "./module-editor.component";
+import {Module} from "./module";
 
 @Component({
     selector: 'home',
@@ -14,35 +15,23 @@ import {ModuleService} from "./module.service";
                     <div class="item">
                         <i class="edit icon"></i>
                         <div class="content">
-                            <a class="header" (click)="createModule()">New module&hellip;</a>
+                            <a class="header" (click)="newModule()">New module&hellip;</a>
                         </div>
                     </div>
-                    <div class="item" *ngFor="#module of modules">
+                    <div class="item" *ngFor="#m of modules">
                         <i class="file icon"></i>
                         <div class="content">
-                            <a class="header">{{module.name}}</a>
+                            <a class="header" (click)="module=m">{{m.name}}</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="twelve wide column">
-            <div class="ui segments">
-                <div class="ui clearing segment">
-                    <div class="ui fluid labeled action input">
-                        <div class="ui basic label">
-                            {{user.username}}/
-                        </div>
-                        <input type="text" placeholder="module-name" [(ngModel)]="moduleName">
-                        <div class="ui icon button" (click)="save()">
-                            <i class="ui save icon"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui segment">
-                    <div ace-editor (contentChange)="moduleCode=$event"></div>
-                </div>
-            </div>
+            <module-editor [module]="module" (moduleSaved)="saveModule($event)"></module-editor>
+            <button class="ui red basic right floated mini button" *ngIf="module!=null" (click)="deleteModule()" style="margin-top:1rem">
+                Delete module
+            </button>
         </div>
     </div>
 </div>
@@ -68,14 +57,13 @@ import {ModuleService} from "./module.service";
   </div>
 </div>
 `,
-    directives: [AceEditor],
+    directives: [ModuleEditor],
 })
 export class Home {
     public isLoggedIn:boolean = false;
     public user;
-    public modules;
-    public moduleName:string = '';
-    public moduleCode:string = '';
+    public modules:Module[];
+    public module:Module;
 
     constructor(private _userService:UserService, private _moduleService:ModuleService) {
         _userService.getUser().subscribe(user => {
@@ -89,13 +77,31 @@ export class Home {
         location.href = '/auth/' + provider;
     }
 
-    save() {
-        if (/[0-9A-Za-z\-]+/.test(this.moduleName)) {
-            this._moduleService.createModule(this.moduleName, this.moduleCode).subscribe(module => {
-                this.modules.push(module);
+    newModule() {
+        this.module = null;
+    }
+
+    saveModule(module:Module) {
+        if (this.module == null) {
+            this._moduleService.createModule(module.name, module.code).subscribe(module => {
+                this.modules.push(module)
+                this.module = module;
             });
         } else {
-            alert('Only alphanumeric characters are allowed for the module name.');
+            this._moduleService.updateModule(this.module.name, module.name, module.code).subscribe(module => {
+                this.module.name = module.name;
+                this.module.code = module.code;
+                this.module.lastModified = module.lastModified;
+            });
+        }
+    }
+
+    deleteModule() {
+        if (this.module != null) {
+            this._moduleService.deleteModule(this.module.name).subscribe(() => {
+                this.modules = this.modules.filter(m => m.name != this.module.name);
+                this.module = null;
+            })
         }
     }
 }
