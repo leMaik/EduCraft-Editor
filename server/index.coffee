@@ -72,6 +72,7 @@ app.use session
 
 app.use passport.initialize()
 app.use passport.session()
+app.use require('body-parser').json()
 
 app.use '/api', (req, res, next) ->
   if !req.user?
@@ -83,6 +84,16 @@ app.get '/auth/craftenforum', passport.authenticate('oauth2', scope: 'read')
 app.get '/auth/craftenforum/callback', passport.authenticate('oauth2', failureRedirect: '/'), (req, res) -> res.redirect('/')
 
 app.get '/api/me', (req, res) -> res.json(req.user).end()
+
+app.get '/api/modules', (req, res) ->
+  res.json(req.user.snippets).end()
+
+app.post '/api/modules', (req, res) ->
+  req.user.snippets.push name: req.body.name, code: req.body.code
+  req.user.markModified 'snippets'
+  req.user.save()
+  .then -> res.status(204).end()
+  .then null, -> res.status(500).end()
 
 app.post '/logout', (req, res) ->
   req.logout()
@@ -97,7 +108,7 @@ app.get '/modules/:username/:module', (req, res) ->
       if snippet
         res.set 'Content-Type', 'text/plain'
         res.send new Buffer """
--- #{req.params.user}/#{req.params.module}
+-- #{req.params.username}/#{req.params.module}
 -- Retrieved on: #{new Date().toISOString()}
 
 #{snippet.code}
