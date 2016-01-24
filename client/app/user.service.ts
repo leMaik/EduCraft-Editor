@@ -1,5 +1,6 @@
 import {Injectable,Inject} from 'angular2/core'
 import {HTTP_PROVIDERS, Http} from 'angular2/http'
+import 'rxjs/operator/map';
 
 @Injectable()
 export class UserService {
@@ -7,10 +8,10 @@ export class UserService {
     }
 
     getUser() {
-        return this._http.get('/api/me');
+        return this._http.get('/api/me').map(user => user.json());
     }
 
     logout() {
-        return this._http.post('/logout', '').subscribe(() => alert('hi'));
+        return this._http.post('/logout', '');
     }
 }

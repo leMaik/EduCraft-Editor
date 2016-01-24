@@ -31,9 +31,15 @@
                 app: {
                     format: 'register',
                     defaultExtension: 'js'
+                },
+                'node_modules/rxjs': {
+                    defaultExtension: 'js'
                 }
             },
-            paths: {}
+            paths: {
+                'rxjs/operator/*': 'node_modules/rxjs/add/operator/*.js',
+                'rxjs/*': 'node_modules/rxjs/*.js'
+            }
         });
         System.import('app/boot').then(null, console.error.bind(console));
     </script>

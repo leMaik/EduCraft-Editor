@@ -1,11 +1,10 @@
 import {Component} from 'angular2/core';
 import {AceEditor} from './ace';
-import {UserService} from "./user.service";
 
 @Component({
-    selector: 'home',
+    selector: 'editor',
     template: `
-<div class="ui grid" *ngIf="isLoggedIn">
+<div class="ui grid">
     <div class="row">
         <div class="four wide column">
             <div class="ui segment">
@@ -36,38 +35,8 @@ import {UserService} from "./user.service";
         </div>
     </div>
 </div>
-<div class="ui middle aligned center aligned grid" *ngIf="!isLoggedIn">
-  <div class="column" style="max-width:400px;padding-top:100px;">
-    <h2 class="ui header">
-      <div class="content">
-        Log-in to your account
-      </div>
-    </h2>
-    <form class="ui large form">
-      <div class="ui stacked segment">
-        <div class="ui fluid large dark blue basic button" (click)="login('craftenforum')">Login via Craften Forum</div>
-      </div>
-
-      <div class="ui error message"></div>
-
-    </form>
-
-    <div class="ui message">
-      New here? <a href="https://forum.craften.de" target="_blank">Sign Up</a>
-    </div>
-  </div>
-</div>
 `,
     directives: [AceEditor],
 })
-export class Home {
-    public isLoggedIn:boolean = false;
-
-    constructor(private _userService:UserService) {
-        _userService.getUser().subscribe(user => this.isLoggedIn = user != null);
-    }
-
-    login(provider:string) {
-        location.href = '/auth/' + provider;
-    }
+export class Editor {
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
 import {UserMenuItemComponent} from './user-menu-item.component';
 import {UserService} from './user.service';
@@ -22,13 +22,10 @@ import {Login} from './login';
     {path: '/', component: Home},
     {path: '/login', component: Login}
 ])
-export class AppComponent implements OnInit {
-    public user = null;
+export class AppComponent {
+    public user;
 
     constructor(private _userService:UserService) {
-    }
-
-    ngOnInit() {
-        this._userService.getUser().subscribe(user => this.user = user.json());
+        _userService.getUser().subscribe(user => this.user = user);
     }
 }
