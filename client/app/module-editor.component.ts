@@ -43,6 +43,8 @@ export class ModuleEditor {
     save() {
         if (/[0-9A-Za-z\-]+/.test(this.name)) {
             this.moduleSaved.emit({name: this.name, code: this.code});
+            this.initialName = this.name;
+            this.initialCode = this.code;
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
         }
