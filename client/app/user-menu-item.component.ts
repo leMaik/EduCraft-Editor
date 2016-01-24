@@ -22,6 +22,6 @@ export class UserMenuItemComponent {
     }
 
     logout() {
-        this._users.logout();
+        this._users.logout().subscribe(() => location.href = '/');
     }
 }
