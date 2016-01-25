@@ -135,14 +135,9 @@ app.get '/modules/:username/:module', (req, res) ->
 
       if snippet
         res.set
-          'Content-Type': 'text/x-lua'
+          'Content-Type': 'text/plain'
           'Last-Modified': snippet.lastModified.toUTCString()
-        res.send new Buffer """
--- #{req.params.username}/#{req.params.module}
--- Last modified: #{snippet.lastModified.toUTCString()}
-
-#{snippet.code}
-"""
+        res.send snippet.code
       else
         res.status(404).send()
     else
