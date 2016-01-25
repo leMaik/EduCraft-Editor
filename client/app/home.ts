@@ -46,6 +46,10 @@ import {Module} from "./module";
         </div>
         <div class="twelve wide column">
             <module-editor [module]="module" (moduleSaved)="saveModule($event)"></module-editor>
+            <button class="ui basic mini button" *ngIf="module!=null" (click)="openRawModule()" style="margin-top:1rem">
+            <i class="ui text file outline icon"></i>
+                Open raw file
+            </button>
             <button class="ui red basic right floated mini button" *ngIf="module!=null" (click)="deleteModule()" style="margin-top:1rem">
                 Delete module
             </button>
@@ -119,6 +123,12 @@ export class Home {
                 this.modules = this.modules.filter(m => m.name != this.module.name);
                 this.module = null;
             })
+        }
+    }
+
+    openRawModule() {
+        if (this.module != null) {
+            window.open('/modules/' + this.user.username + '/' + this.module.name);
         }
     }
 }
