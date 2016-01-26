@@ -36,9 +36,23 @@
                     defaultExtension: 'js'
                 }
             },
+            meta: {
+                'node_modules/blockly/blockly_compressed.js': {
+                    format: 'global',
+                    exports: 'Blockly'
+                },
+                'node_modules/blockly/blocks_compressed.js': {
+                    format: 'global',
+                    deps: [
+                        'node_modules/blockly/blockly_compressed.js'
+                    ]
+                }
+            },
             paths: {
                 'rxjs/operator/*': 'node_modules/rxjs/add/operator/*.js',
-                'rxjs/*': 'node_modules/rxjs/*.js'
+                'rxjs/*': 'node_modules/rxjs/*.js',
+                'blockly': 'node_modules/blockly/blockly_compressed.js',
+                'blockly/blocks': 'node_modules/blockly/blocks_compressed.js'
             }
         });
         System.import('app/boot').then(null, console.error.bind(console));
