@@ -15,6 +15,7 @@ export default {
         }
     },
     codeGenerator: function (block:Blockly.Block) {
-
+        let blockType = block.getFieldValue('block');
+        return 'placeBlockAhead("' + blockType + '")\n';
     }
 };

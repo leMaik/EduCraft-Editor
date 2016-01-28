@@ -15,9 +15,9 @@ export default {
     codeGenerator: function (block:Blockly.Block) {
         switch (block.getFieldValue('direction')) {
             case 'left':
-                return 'turnLeft()';
+                return 'turnLeft()\n';
             case 'right':
-                return 'turnRight()';
+                return 'turnRight()\n';
         }
     }
 };

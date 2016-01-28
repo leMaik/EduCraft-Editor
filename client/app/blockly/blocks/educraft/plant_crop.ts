@@ -10,7 +10,5 @@ export default {
             this.setHelpUrl('https://github.com/leMaik/EduCraft/wiki/The-API#plantcrop');
         }
     },
-    codeGenerator: function (block:Blockly.Block) {
-
-    }
+    codeGenerator: () => 'plantCrop()\n'
 };

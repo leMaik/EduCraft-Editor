@@ -15,10 +15,8 @@ export default  {
         }
     },
     codeGenerator: function (block:Blockly.Block) {
-        var dropdown_block = block.getFieldValue('block');
-        var statements_body = Blockly.JavaScript.statementToCode(block, 'body');
-        // TODO: Assemble JavaScript into code variable.
-        var code = '...';
-        return code;
+        let blockType = block.getFieldValue('block');
+        let branch = Blockly.Lua.statementToCode(block, 'body') || '';
+        return 'ifBlockAhead("' + blockType + '", function()\n' + branch + 'end)\n';
     }
 };

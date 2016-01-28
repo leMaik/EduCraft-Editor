@@ -11,7 +11,5 @@ export default {
             this.setHelpUrl('https://github.com/leMaik/EduCraft/wiki/The-API#moveforward');
         }
     },
-    codeGenerator: function (block:Blockly.Block) {
-        return
-    }
+    codeGenerator: () => 'moveForward()\n'
 };

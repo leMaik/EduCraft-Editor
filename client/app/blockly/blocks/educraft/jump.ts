@@ -10,12 +10,5 @@ export default {
             this.setHelpUrl('https://github.com/leMaik/EduCraft/wiki/The-API#jump');
         }
     },
-    codeGenerator: function (block:Blockly.Block) {
-        switch (block.getFieldValue('direction')) {
-            case 'left':
-                return 'turnLeft()';
-            case 'right':
-                return 'turnRight()';
-        }
-    }
+    codeGenerator: () => 'jump()\n'
 };

@@ -1,17 +1,22 @@
 /// <reference path="../../typings/blockly/blockly-core.d.ts" />
 
 import {ElementRef, Component, EventEmitter, Output, AfterViewInit} from 'angular2/core';
-import 'blockly';
+import 'blockly'
+import LuaGenerator from './lua'
 import ProgramBaseBlock from './blocks/program_base'
 import RepeatBlock from './blocks/repeat'
 import EduCraftBlocks from './blocks/educraft/educraft'
 
-Blockly.Blocks['program_base'] = ProgramBaseBlock;
+Blockly.Lua = LuaGenerator; //TODO refactor this so that Blockly doesn't need to be changed
 
-Blockly.Blocks['repeat'] = RepeatBlock;
+Blockly.Blocks['program_base'] = ProgramBaseBlock.block;
+LuaGenerator['program_base'] = ProgramBaseBlock.codeGenerator;
+Blockly.Blocks['repeat'] = RepeatBlock.block;
+LuaGenerator['repeat'] = RepeatBlock.codeGenerator;
 
 for (let name of Object.keys(EduCraftBlocks)) {
     Blockly.Blocks[name] = EduCraftBlocks[name].block;
+    LuaGenerator[name] = EduCraftBlocks[name].codeGenerator;
 }
 
 @Component({
@@ -62,7 +67,13 @@ export class BlocklyArea implements AfterViewInit {
             toolbox: this.element.querySelector('.toolbox'),
             scrollbars: true
         });
+        this.blockly.addChangeListener(() => console.log(this.code));
+
         var xml = '<xml><block type="program_base" deletable="false" movable="false"></block></xml>';
         Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(xml));
+    }
+
+    get code() {
+        return LuaGenerator.workspaceToCode(this.blockly);
     }
 }

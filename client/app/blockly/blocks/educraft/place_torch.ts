@@ -10,7 +10,5 @@ export default {
             this.setHelpUrl('https://github.com/leMaik/EduCraft/wiki/The-API#placetorch');
         }
     },
-    codeGenerator: function (block:Blockly.Block) {
-
-    }
+    codeGenerator: () => 'placeTorch()\n'
 };

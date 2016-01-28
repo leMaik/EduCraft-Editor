@@ -11,7 +11,5 @@ export default {
             this.setHelpUrl('https://github.com/leMaik/EduCraft/wiki/The-API#destroyblock');
         }
     },
-    codeGenerator: function (block:Blockly.Block) {
-        return
-    }
+    codeGenerator: () => 'destroyBlock()\n'
 };
