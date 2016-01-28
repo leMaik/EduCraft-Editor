@@ -3,7 +3,7 @@ import {UserService} from "./user.service";
 import {ModuleService} from "./module.service";
 import {ModuleEditor} from "./module-editor.component";
 import {Module} from "./module";
-import {BlocklyArea} from "./blockly";
+import {BlocklyArea} from "./blockly/blockly";
 
 @Component({
     selector: 'home',
