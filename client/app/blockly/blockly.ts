@@ -22,7 +22,7 @@ for (let name of Object.keys(EduCraftBlocks)) {
 @Component({
     selector: 'blockly-area',
     inputs: ['content'],
-    outputs: ['contentChange: change'],
+    outputs: ['codeChange: change'],
     template: `
 <div class="editor" style="height: 500px"></div>
 <xml class="toolbox" style="display: none">
@@ -56,7 +56,7 @@ export class BlocklyArea implements AfterViewInit {
     private blockly;
     private element:HTMLElement;
 
-    @Output() contentChange:EventEmitter<string> = new EventEmitter();
+    @Output() codeChange:EventEmitter<string> = new EventEmitter();
 
     constructor(elementRef:ElementRef) {
         this.element = <HTMLElement>elementRef.nativeElement;
@@ -67,13 +67,11 @@ export class BlocklyArea implements AfterViewInit {
             toolbox: this.element.querySelector('.toolbox'),
             scrollbars: true
         });
-        this.blockly.addChangeListener(() => console.log(this.code));
+        this.blockly.addChangeListener(() => {
+            this.codeChange.emit(LuaGenerator.workspaceToCode(this.blockly));
+        });
 
         var xml = '<xml><block type="program_base" deletable="false" movable="false"></block></xml>';
         Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(xml));
-    }
-
-    get code() {
-        return LuaGenerator.workspaceToCode(this.blockly);
     }
 }

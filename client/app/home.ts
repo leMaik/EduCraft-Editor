@@ -3,7 +3,7 @@ import {UserService} from "./user.service";
 import {ModuleService} from "./module.service";
 import {ModuleEditor} from "./module-editor.component";
 import {Module} from "./module";
-import {BlocklyArea} from "./blockly/blockly";
+import {BlocklyEditor} from "./blockly-editor.component";
 
 @Component({
     selector: 'home',
@@ -47,7 +47,7 @@ import {BlocklyArea} from "./blockly/blockly";
         </div>
         <div class="twelve wide column">
             <!--<module-editor [module]="module" (moduleSaved)="saveModule($event)"></module-editor>--> <!-- TODO -->
-            <blockly-area></blockly-area>
+            <blockly-editor></blockly-editor>
             <button class="ui basic mini button" *ngIf="module!=null" (click)="openRawModule()" style="margin-top:1rem">
             <i class="ui text file outline icon"></i>
                 Open raw file
@@ -71,7 +71,6 @@ import {BlocklyArea} from "./blockly/blockly";
       </div>
 
       <div class="ui error message"></div>
-
     </form>
 
     <div class="ui message">
@@ -80,7 +79,7 @@ import {BlocklyArea} from "./blockly/blockly";
   </div>
 </div>
 `,
-    directives: [ModuleEditor, BlocklyArea],
+    directives: [ModuleEditor, BlocklyEditor],
 })
 export class Home {
     public isLoggedIn:boolean = false;
