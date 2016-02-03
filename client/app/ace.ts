@@ -21,10 +21,6 @@ export class AceEditor {
         // Ideally this wouldn't be required
         var el = elementRef.nativeElement;
 
-        el.classList.add("editor");
-        el.style.height = "250px";
-        el.style.width = "100%";
-
         this.editor = ace.edit(el);
         this.editor.setTheme("ace/theme/chrome");
         this.editor.getSession().setMode("ace/mode/lua");

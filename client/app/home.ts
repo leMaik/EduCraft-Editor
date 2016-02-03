@@ -18,6 +18,19 @@ import {Module} from "./module";
 .modules .item {
     padding: 1rem;
 }
+
+.ui.grid {
+    height: calc(100% - 40px);
+}
+
+.ui.grid .row {
+    padding-bottom: 0;
+    height: 100%;
+}
+
+.editor {
+    height: calc(100% - 2rem + 2px);
+}
 `],
     template: `
 <div class="ui grid" *ngIf="isLoggedIn">
@@ -45,18 +58,20 @@ import {Module} from "./module";
             </div>
         </div>
         <div class="twelve wide column">
-            <module-editor [module]="module" (moduleSaved)="saveModule($event)"></module-editor>
-            <button class="ui basic mini button" *ngIf="module!=null" (click)="openRawModule()" style="margin-top:1rem">
+            <div class="editor">
+                <module-editor [module]="module" (moduleSaved)="saveModule($event)"></module-editor>
+            </div>
+            <button class="ui basic mini button" *ngIf="module!=null" (click)="openRawModule()">
             <i class="ui text file outline icon"></i>
                 Open raw file
             </button>
-            <button class="ui red basic right floated mini button" *ngIf="module!=null" (click)="deleteModule()" style="margin-top:1rem">
+            <button class="ui red basic right floated mini button" *ngIf="module!=null" (click)="deleteModule()">
                 Delete module
             </button>
         </div>
     </div>
 </div>
-<div class="ui middle aligned center aligned grid" *ngIf="!isLoggedIn">
+<div class="ui center aligned grid" *ngIf="!isLoggedIn">
   <div class="column" style="max-width:400px;padding-top:100px;">
     <h2 class="ui header">
       <div class="content">
@@ -69,7 +84,6 @@ import {Module} from "./module";
       </div>
 
       <div class="ui error message"></div>
-
     </form>
 
     <div class="ui message">

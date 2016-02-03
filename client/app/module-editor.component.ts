@@ -6,6 +6,16 @@ import {Module} from "./module";
 @Component({
     selector: 'module-editor',
     inputs: ['module'],
+    styles: [`
+.ui.segment.editor {
+    height: calc(100% - 5.5rem - 4px);
+}
+
+[ace-editor] {
+    width: 100%;
+    height: 100%;
+}
+`],
     template: `
 <div class="ui piled segments">
     <div class="ui clearing segment">
@@ -19,7 +29,7 @@ import {Module} from "./module";
             </div>
         </div>
     </div>
-    <div class="ui segment">
+    <div class="ui segment editor">
         <div ace-editor (contentChange)="code=$event" [content]="initialCode"></div>
     </div>
 </div>
