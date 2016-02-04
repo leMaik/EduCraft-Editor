@@ -17,7 +17,7 @@ import {Module} from "./module";
 }
 `],
     template: `
-<div class="ui piled segments">
+<div class="ui piled segments" (keydown)="keyDown($event)">
     <div class="ui clearing segment">
         <div class="ui fluid labeled action input">
             <div class="ui basic label">
@@ -57,6 +57,13 @@ export class ModuleEditor {
             this.initialCode = this.code;
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
+        }
+    }
+
+    keyDown(event) {
+        if (event.keyCode == 83 && event.ctrlKey) {
+            this.save();
+            event.preventDefault();
         }
     }
 
