@@ -6,8 +6,18 @@ import {Module} from "./module";
 @Component({
     selector: 'module-editor',
     inputs: ['module'],
+    styles: [`
+.ui.segment.editor {
+    height: calc(100% - 5.5rem - 4px);
+}
+
+[ace-editor] {
+    width: 100%;
+    height: 100%;
+}
+`],
     template: `
-<div class="ui piled segments">
+<div class="ui piled segments" (keydown)="keyDown($event)">
     <div class="ui clearing segment">
         <div class="ui fluid labeled action input">
             <div class="ui basic label">
@@ -19,7 +29,7 @@ import {Module} from "./module";
             </div>
         </div>
     </div>
-    <div class="ui segment">
+    <div class="ui segment editor">
         <div ace-editor (contentChange)="code=$event" [content]="initialCode"></div>
     </div>
 </div>
@@ -47,6 +57,13 @@ export class ModuleEditor {
             this.initialCode = this.code;
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
+        }
+    }
+
+    keyDown(event) {
+        if (event.keyCode == 83 && event.ctrlKey) {
+            this.save();
+            event.preventDefault();
         }
     }
 
