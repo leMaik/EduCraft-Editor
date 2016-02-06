@@ -7,6 +7,16 @@ import {BlocklyArea} from "./blockly/blockly";
 @Component({
     selector: 'blockly-editor',
     inputs: ['workspace'],
+    styles: [`
+.ui.tab.editor {
+    height: calc(100% - 11.5rem - 6px);
+}
+
+[ace-editor] {
+    width: 100%;
+    height: 100%;
+}
+`],
     template: `
 <div class="ui piled segments">
     <div class="ui clearing segment">
@@ -28,7 +38,7 @@ import {BlocklyArea} from "./blockly/blockly";
         <div class="ui tab" data-tab="tab-name">
             <blockly-area (codeChange)="code=$event"></blockly-area>
         </div>
-        <div class="ui tab" data-tab="tab-name2">
+        <div class="ui tab editor" data-tab="tab-name2">
             <div ace-editor [content]="code"></div>
         </div>
     </div>
