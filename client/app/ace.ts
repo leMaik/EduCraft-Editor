@@ -3,7 +3,7 @@ import {ElementRef, Directive, EventEmitter, Output} from 'angular2/core';
 
 @Directive({
     selector: '[ace-editor]',
-    inputs: ['content'],
+    inputs: ['content', 'readOnly'],
     outputs: ['contentChange: change']
 })
 export class AceEditor {
@@ -37,5 +37,9 @@ export class AceEditor {
         this.editor.setValue(text);
         this.editor.clearSelection();
         this.editor.focus();
+    }
+
+    set readOnly(readOnly:boolean) {
+        this.editor.setReadOnly(readOnly);
     }
 }

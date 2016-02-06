@@ -39,7 +39,7 @@ import {BlocklyArea} from "./blockly/blockly";
             <blockly-area (codeChange)="code=$event"></blockly-area>
         </div>
         <div class="ui tab editor" data-tab="tab-name2">
-            <div ace-editor [content]="code"></div>
+            <div ace-editor [content]="code" [readOnly]="true"></div>
         </div>
     </div>
 </div>
