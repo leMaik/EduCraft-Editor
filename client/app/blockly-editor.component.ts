@@ -20,7 +20,7 @@ const DEFAULT_PROGRAM = '<xml><block type="program_base" deletable="false" movab
 }
 `],
     template: `
-<div class="ui piled segments">
+<div class="ui piled segments" (keydown)="keyDown($event)">
     <div class="ui clearing segment">
         <div class="ui fluid labeled action input">
             <div class="ui basic label">
@@ -33,7 +33,7 @@ const DEFAULT_PROGRAM = '<xml><block type="program_base" deletable="false" movab
         </div>
     </div>
     <div class="ui segment">
-        <div class="ui tabular menu">
+        <div class="ui secondary pointing menu">
             <div class="item" [ngClass]="{active: tab=='blockly'}" (click)="tab='blockly'">Blockly</div>
             <div class="item" [ngClass]="{active: tab=='code'}" (click)="tab='code'">Code</div>
         </div>
@@ -71,6 +71,13 @@ export class BlocklyEditor {
             this.initialBlockly = this.blockly;
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
+        }
+    }
+
+    keyDown(event) {
+        if (event.keyCode == 83 && event.ctrlKey) {
+            this.save();
+            event.preventDefault();
         }
     }
 
