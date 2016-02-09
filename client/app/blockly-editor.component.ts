@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Output, Input, OnInit} from 'angular2/core';
 import {AceEditor} from './ace';
 import {UserService} from "./user.service";
-import {Module} from "./module";
+import {BlocklyModule} from "./module";
 import {BlocklyArea} from "./blockly/blockly";
+
+const DEFAULT_PROGRAM = '<xml><block type="program_base" deletable="false" movable="false"></block></xml>';
 
 @Component({
     selector: 'blockly-editor',
-    inputs: ['workspace'],
+    inputs: ['module'],
     styles: [`
 .ui.tab.editor {
     height: calc(100% - 11.5rem - 6px);
@@ -36,7 +38,7 @@ import {BlocklyArea} from "./blockly/blockly";
             <div class="item" data-tab="tab-name2">Code</div>
         </div>
         <div class="ui tab" data-tab="tab-name">
-            <blockly-area (codeChange)="code=$event"></blockly-area>
+            <blockly-area (codeChange)="code=$event.code;blockly=$event.source" [source]="initialBlockly"></blockly-area>
         </div>
         <div class="ui tab editor" data-tab="tab-name2">
             <div ace-editor [content]="code" [readOnly]="true"></div>
@@ -49,10 +51,11 @@ import {BlocklyArea} from "./blockly/blockly";
 export class BlocklyEditor implements OnInit {
     public user = {};
     private initialName:string;
-    private initialWorkspace:string;
+    private initialBlockly:string = DEFAULT_PROGRAM;
     private name:string;
     private code:string = '';
-    @Output() moduleSaved:EventEmitter<Module> = new EventEmitter();
+    private blockly:string = DEFAULT_PROGRAM;
+    @Output() moduleSaved:EventEmitter<BlocklyModule> = new EventEmitter();
 
     constructor(private _userService:UserService) {
         _userService.getUser().subscribe(user => {
@@ -66,22 +69,23 @@ export class BlocklyEditor implements OnInit {
 
     save() {
         if (/[0-9A-Za-z\-]+/.test(this.name)) {
-            this.moduleSaved.emit({name: this.name, code: this.code});
+            this.moduleSaved.emit({name: this.name, code: this.code, blockly: this.blockly});
             this.initialName = this.name;
-            this.initialWorkspace = this.code;
+            this.initialBlockly = this.blockly;
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
         }
     }
 
-    set module(module:Module) {
+    set module(module:BlocklyModule) {
         this.initialName = module != null ? module.name : '';
-        this.initialWorkspace = module != null ? module.code : '';
+        this.initialBlockly = module != null ? module.blockly : DEFAULT_PROGRAM;
         this.name = this.initialName;
-        this.code = this.initialWorkspace;
+        this.blockly = this.initialBlockly;
+        this.code = module != null ? module.code : '';
     }
 
     get modified() {
-        return this.code != this.initialWorkspace || this.name != this.initialName;
+        return this.blockly != this.initialBlockly || this.name != this.initialName;
     }
 }

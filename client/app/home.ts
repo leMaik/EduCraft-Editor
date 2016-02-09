@@ -4,6 +4,7 @@ import {ModuleService} from "./module.service";
 import {ModuleEditor} from "./module-editor.component";
 import {Module} from "./module";
 import {BlocklyEditor} from "./blockly-editor.component";
+import {BlocklyModule} from "./module";
 
 @Component({
     selector: 'home',
@@ -60,8 +61,8 @@ import {BlocklyEditor} from "./blockly-editor.component";
         </div>
         <div class="twelve wide column">
             <div class="editor">
-                <!--<module-editor [module]="module" (moduleSaved)="saveModule($event)"></module-editor>-->
-                <blockly-editor></blockly-editor>
+                <module-editor *ngIf="!isBlocklyModule()" [module]="module" (moduleSaved)="saveModule($event)"></module-editor>
+                <blockly-editor *ngIf="isBlocklyModule()" [module]="module" (moduleSaved)="saveBlocklyModule($event)"></blockly-editor>
             </div>
             <button class="ui basic mini button" *ngIf="module!=null" (click)="openRawModule()">
             <i class="ui text file outline icon"></i>
@@ -121,11 +122,26 @@ export class Home {
     saveModule(module:Module) {
         if (this.module == null) {
             this._moduleService.createModule(module.name, module.code).subscribe(module => {
-                this.modules.push(module)
+                this.modules.push(module);
                 this.module = module;
             });
         } else {
             this._moduleService.updateModule(this.module.name, module.name, module.code).subscribe(module => {
+                this.module.name = module.name;
+                this.module.code = module.code;
+                this.module.lastModified = module.lastModified;
+            });
+        }
+    }
+
+    saveBlocklyModule(module:BlocklyModule) {
+        if (this.module == null) {
+            this._moduleService.createBlocklyModule(module.name, module.code, module.blockly).subscribe(module => {
+                this.modules.push(module);
+                this.module = module;
+            });
+        } else {
+            this._moduleService.updateBlocklyModule(this.module.name, module.name, module.code, module.blockly).subscribe(module => {
                 this.module.name = module.name;
                 this.module.code = module.code;
                 this.module.lastModified = module.lastModified;
@@ -146,5 +162,9 @@ export class Home {
         if (this.module != null) {
             window.open('/modules/' + this.user.username + '/' + this.module.name);
         }
+    }
+
+    isBlocklyModule() {
+        return this.module == null || (<BlocklyModule>this.module).blockly;
     }
 }

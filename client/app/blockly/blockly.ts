@@ -1,13 +1,13 @@
 /// <reference path="../../typings/blockly/blockly-core.d.ts" />
 
-import {ElementRef, Component, EventEmitter, Output, AfterViewInit} from 'angular2/core';
+import {ElementRef, Component, EventEmitter, Output, AfterViewInit, OnDestroy} from 'angular2/core';
 import 'blockly'
 import LuaGenerator from './lua'
 import ProgramBaseBlock from './blocks/program_base'
 import RepeatBlock from './blocks/repeat'
 import EduCraftBlocks from './blocks/educraft/educraft'
 
-Blockly.Lua = LuaGenerator; //TODO refactor this so that Blockly doesn't need to be changed
+Blockly['Lua'] = LuaGenerator; //TODO refactor this so that Blockly doesn't need to be changed
 
 Blockly.Blocks['program_base'] = ProgramBaseBlock.block;
 LuaGenerator['program_base'] = ProgramBaseBlock.codeGenerator;
@@ -21,7 +21,7 @@ for (let name of Object.keys(EduCraftBlocks)) {
 
 @Component({
     selector: 'blockly-area',
-    inputs: ['content'],
+    inputs: ['source'],
     outputs: ['codeChange: change'],
     template: `
 <div class="editor" style="height: 500px"></div>
@@ -52,26 +52,50 @@ for (let name of Object.keys(EduCraftBlocks)) {
 </xml>
 `
 })
-export class BlocklyArea implements AfterViewInit {
+export class BlocklyArea implements AfterViewInit, OnDestroy {
     private blockly;
     private element:HTMLElement;
+    private _source:string;
 
-    @Output() codeChange:EventEmitter<string> = new EventEmitter();
+    @Output() codeChange:EventEmitter<{code:string,source:string}> = new EventEmitter();
 
     constructor(elementRef:ElementRef) {
         this.element = <HTMLElement>elementRef.nativeElement;
     }
 
-    ngAfterViewInit():any {
+    ngAfterViewInit() {
         this.blockly = Blockly.inject(this.element.querySelector('.editor'), {
             toolbox: this.element.querySelector('.toolbox'),
             scrollbars: true
         });
         this.blockly.addChangeListener(() => {
-            this.codeChange.emit(LuaGenerator.workspaceToCode(this.blockly));
+            this.codeChange.emit({
+                code: LuaGenerator.workspaceToCode(this.blockly),
+                source: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(this.blockly))
+            });
         });
 
-        var xml = '<xml><block type="program_base" deletable="false" movable="false"></block></xml>';
-        Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(xml));
+        if (this._source != null) {
+            this.blockly.clear();
+            Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(this._source));
+        }
+    }
+
+    ngOnDestroy() {
+        this.blockly.dispose();
+
+        //Blockly re-uses the following elements and thus doesn't remove them
+        Blockly.WidgetDiv.DIV.remove();
+        Blockly.WidgetDiv.DIV = null;
+        Blockly.Tooltip.DIV.remove();
+        Blockly.Tooltip.DIV = null;
+    }
+
+    set source(content:string) {
+        if (this.blockly != null) {
+            this.blockly.clear();
+            Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(content));
+        }
+        this._source = content;
     }
 }
