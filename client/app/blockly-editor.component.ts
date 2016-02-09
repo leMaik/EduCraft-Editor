@@ -10,7 +10,7 @@ const DEFAULT_PROGRAM = '<xml><block type="program_base" deletable="false" movab
     selector: 'blockly-editor',
     inputs: ['module'],
     styles: [`
-.ui.tab.editor {
+.ui.tab {
     height: calc(100% - 11.5rem - 6px);
 }
 
@@ -34,22 +34,23 @@ const DEFAULT_PROGRAM = '<xml><block type="program_base" deletable="false" movab
     </div>
     <div class="ui segment">
         <div class="ui tabular menu">
-            <div class="item" data-tab="tab-name">Blockly</div>
-            <div class="item" data-tab="tab-name2">Code</div>
+            <div class="item" [ngClass]="{active: tab=='blockly'}" (click)="tab='blockly'">Blockly</div>
+            <div class="item" [ngClass]="{active: tab=='code'}" (click)="tab='code'">Code</div>
         </div>
-        <div class="ui tab" data-tab="tab-name">
-            <blockly-area (codeChange)="code=$event.code;blockly=$event.source" [source]="initialBlockly"></blockly-area>
+        <div class="ui tab" [ngClass]="{active: tab=='blockly'}">
+            <blockly-area (codeChange)="onBlocklyChange($event)" [source]="blockly" *ngIf="tab=='blockly'"></blockly-area>
         </div>
-        <div class="ui tab editor" data-tab="tab-name2">
-            <div ace-editor [content]="code" [readOnly]="true"></div>
+        <div class="ui tab" [ngClass]="{active: tab=='code'}">
+            <div ace-editor [content]="code" [readOnly]="true" *ngIf="tab=='code'"></div>
         </div>
     </div>
 </div>
 `,
     directives: [AceEditor, BlocklyArea],
 })
-export class BlocklyEditor implements OnInit {
+export class BlocklyEditor {
     public user = {};
+    public tab = 'blockly';
     private initialName:string;
     private initialBlockly:string = DEFAULT_PROGRAM;
     private name:string;
@@ -63,10 +64,6 @@ export class BlocklyEditor implements OnInit {
         });
     }
 
-    ngOnInit() {
-        $('.tabular.menu .item').tab();
-    }
-
     save() {
         if (/[0-9A-Za-z\-]+/.test(this.name)) {
             this.moduleSaved.emit({name: this.name, code: this.code, blockly: this.blockly});
@@ -74,6 +71,16 @@ export class BlocklyEditor implements OnInit {
             this.initialBlockly = this.blockly;
         } else {
             alert('Only alphanumeric characters are allowed for the module name.');
+        }
+    }
+
+    onBlocklyChange(event:{code:string,source:string}) {
+        let {code, source} = event;
+        if (this.code != code) {
+            this.code = code;
+        }
+        if (this.blockly != source) {
+            this.blockly = source;
         }
     }
 

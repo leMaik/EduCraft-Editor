@@ -24,7 +24,7 @@ for (let name of Object.keys(EduCraftBlocks)) {
     inputs: ['source'],
     outputs: ['codeChange: change'],
     template: `
-<div class="editor" style="height: 500px"></div>
+<div class="editor" style="height:100%"></div>
 <xml class="toolbox" style="display: none">
     <category name="Moving">
       <block type="move_forward"></block>
@@ -68,10 +68,12 @@ export class BlocklyArea implements AfterViewInit, OnDestroy {
             toolbox: this.element.querySelector('.toolbox'),
             scrollbars: true
         });
+        Blockly.svgResize(this.blockly); //prevent editor from flickering
         this.blockly.addChangeListener(() => {
+            this._source = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(this.blockly));
             this.codeChange.emit({
                 code: LuaGenerator.workspaceToCode(this.blockly),
-                source: Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(this.blockly))
+                source: this._source
             });
         });
 
@@ -92,10 +94,12 @@ export class BlocklyArea implements AfterViewInit, OnDestroy {
     }
 
     set source(content:string) {
-        if (this.blockly != null) {
-            this.blockly.clear();
-            Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(content));
+        if (content != this._source) {
+            if (this.blockly != null) {
+                this.blockly.clear();
+                Blockly.Xml.domToWorkspace(this.blockly, Blockly.Xml.textToDom(content));
+            }
+            this._source = content;
         }
-        this._source = content;
     }
 }
