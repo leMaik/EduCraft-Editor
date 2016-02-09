@@ -6,6 +6,9 @@ module.exports = (mongoose) ->
     code:
       type: String
       required: true
+    blockly:
+      type: String
+      required: false
     lastModified:
       type: Date
 
