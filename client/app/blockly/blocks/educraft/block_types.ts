@@ -1,0 +1,23 @@
+export default [
+    ["bedrock", "bedrock"],
+    ["bricks", "bricks"],
+    ["coal ore", "oreCoal"],
+    ["dirt", "dirt"],
+    ["emerald ore", "oreEmerald"],
+    ["farmland", "farmland"],
+    ["glass", "glass"],
+    ["gold ore", "oreGold"],
+    ["grass", "grass"],
+    ["gravel", "gravel"],
+    ["hardened clay", "clayHardened"],
+    ["iron ore", "oreIron"],
+    ["lapis ore", "oreLapis"],
+    ["lava", "lava"],
+    ["acacia log", "logAcacia"],
+    ["redstone ore", "oreRedstone"],
+    ["sand", "sand"],
+    ["sandstone", "sandstone"],
+    ["stone", "stone"],
+    ["tnt", "tnt"],
+    ["white wool", "wool"]
+];

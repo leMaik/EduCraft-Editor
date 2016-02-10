@@ -15,7 +15,22 @@ export class ModuleService {
     createModule(module:string, code:string) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this._http.post('/api/modules', JSON.stringify({name: module, code: code}), {
+        return this._http.post('/api/modules', JSON.stringify({
+            name: module,
+            code: code
+        }), {
+            headers: headers
+        }).map(module => module.json());
+    }
+
+    createBlocklyModule(module:string, code:string, blockly:string) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this._http.post('/api/modules', JSON.stringify({
+            name: module,
+            code: code,
+            blockly: blockly
+        }), {
             headers: headers
         }).map(module => module.json());
     }
@@ -23,7 +38,22 @@ export class ModuleService {
     updateModule(existingModule:string, module:string, code:string) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this._http.put('/api/modules/' + existingModule, JSON.stringify({name: module, code: code}), {
+        return this._http.put('/api/modules/' + existingModule, JSON.stringify({
+            name: module,
+            code: code
+        }), {
+            headers: headers
+        }).map(module => module.json());
+    }
+
+    updateBlocklyModule(existingModule:string, module:string, code:string, blockly:string) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this._http.put('/api/modules/' + existingModule, JSON.stringify({
+            name: module,
+            code: code,
+            blockly: blockly
+        }), {
             headers: headers
         }).map(module => module.json());
     }

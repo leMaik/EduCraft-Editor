@@ -90,7 +90,11 @@ app.get '/api/modules', (req, res) ->
 
 app.post '/api/modules', (req, res) ->
   if !req.user.snippets.find((s) -> s.name == req.body.name)?
-    module = name: req.body.name, code: req.body.code, lastModified: new Date()
+    module =
+      name: req.body.name
+      code: req.body.code
+      blockly: req.body.blockly
+      lastModified: new Date()
     req.user.snippets.push module
     req.user.markModified 'snippets'
     req.user.save()
@@ -106,6 +110,7 @@ app.put '/api/modules/:module', (req, res) ->
     if !renamedModule? or module == renamedModule
       module.name = req.body.name
       module.code = req.body.code
+      module.blockly = req.body.blockly
       module.lastModified = new Date()
       req.user.markModified 'snippets'
       req.user.save()
