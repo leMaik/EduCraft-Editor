@@ -4,7 +4,7 @@ import {UserService} from "./user.service";
 import {BlocklyModule} from "./module";
 import {BlocklyArea} from "./blockly/blockly";
 
-const DEFAULT_PROGRAM = '<xml><block type="program_base" deletable="false" movable="false"></block></xml>';
+const DEFAULT_PROGRAM = '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="program_base" deletable="false" movable="false" x="0" y="0"></block></xml>';
 
 @Component({
     selector: 'blockly-editor',

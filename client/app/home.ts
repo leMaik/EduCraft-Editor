@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, ElementRef} from 'angular2/core';
 import {UserService} from "./user.service";
 import {ModuleService} from "./module.service";
 import {ModuleEditor} from "./module-editor.component";
@@ -38,9 +38,14 @@ import {BlocklyModule} from "./module";
 <div class="ui grid" *ngIf="isLoggedIn">
     <div class="row">
         <div class="four wide column">
-            <div class="ui fluid blue basic button" (click)="newModule()">
-                <i class="ui edit icon"></i>
+            <div class="ui floating fluid blue basic dropdown button">
+                <i class="ui write icon"></i>
                 New module&hellip;
+
+                <div class="menu">
+                    <a class="item" (click)="newBlocklyModule()"><i class="puzzle icon"></i> Blockly module</a>
+                    <a class="item" (click)="newModule()"><i class="code icon"></i> Lua module</a>
+                </div>
             </div>
             <div style="margin-top:1rem">
                 <h5 class="ui top attached header">
@@ -52,7 +57,8 @@ import {BlocklyModule} from "./module";
                     </div>
                     <div class="ui list" *ngIf="modules.length>0">
                         <div class="item" *ngFor="#m of modules" (click)="module=m" style="cursor:pointer" [ngClass]="{active: m==module}">
-                            <i class="code icon"></i>
+                            <i class="code icon" *ngIf="!m.blockly"></i>
+                            <i class="puzzle icon" *ngIf="m.blockly"></i>
                             <div class="content">{{m.name}}</div>
                         </div>
                     </div>
@@ -102,11 +108,13 @@ export class Home {
     public user;
     public modules:Module[] = [];
     public module:Module;
+    private isBlockly:boolean = true;
 
-    constructor(private _userService:UserService, private _moduleService:ModuleService) {
+    constructor(private _userService:UserService, private _moduleService:ModuleService, private elementRef:ElementRef) {
         _userService.getUser().subscribe(user => {
             this.user = user;
-            this.isLoggedIn = user != null
+            this.isLoggedIn = user != null;
+            this.initView();
         });
         _moduleService.getModules().subscribe(modules => this.modules = modules);
     }
@@ -117,6 +125,12 @@ export class Home {
 
     newModule() {
         this.module = null;
+        this.isBlockly = false;
+    }
+
+    newBlocklyModule() {
+        this.module = null;
+        this.isBlockly = true;
     }
 
     saveModule(module:Module) {
@@ -165,6 +179,14 @@ export class Home {
     }
 
     isBlocklyModule() {
-        return this.module == null || (<BlocklyModule>this.module).blockly;
+        return (this.module == null && this.isBlockly) || (this.module != null && (<BlocklyModule>this.module).blockly);
+    }
+
+    private initView() {
+        setTimeout(() => {
+            $(this.elementRef.nativeElement).find('.ui.dropdown').dropdown({
+                action: 'hide'
+            });
+        }, 100);
     }
 }
