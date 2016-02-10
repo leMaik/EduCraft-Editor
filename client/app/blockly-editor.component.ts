@@ -97,6 +97,8 @@ export class BlocklyEditor {
         this.name = this.initialName;
         this.blockly = this.initialBlockly;
         this.code = module != null ? module.code : '';
+
+        this.tab = 'blockly';
     }
 
     get modified() {
