@@ -5,7 +5,7 @@ module.exports = (mongoose) ->
       required: true
     code:
       type: String
-      required: true
+      required: false
     lastModified:
       type: Date
 

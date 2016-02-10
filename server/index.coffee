@@ -137,7 +137,7 @@ app.get '/modules/:username/:module', (req, res) ->
         res.set
           'Content-Type': 'text/plain'
           'Last-Modified': snippet.lastModified.toUTCString()
-        res.send snippet.code
+        res.send(snippet.code || '')
       else
         res.status(404).send()
     else
