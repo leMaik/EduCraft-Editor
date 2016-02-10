@@ -43,8 +43,12 @@ import {BlocklyModule} from "./module";
                 New module&hellip;
 
                 <div class="menu">
-                    <a class="item" (click)="newBlocklyModule()"><i class="puzzle icon"></i> Blockly module</a>
-                    <a class="item" (click)="newModule()"><i class="code icon"></i> Lua module</a>
+                    <a class="item" (click)="newBlocklyModule()" data-content="Dive into the world of programming &ndash; without any code!" data-variation="inverted">
+                        <i class="puzzle icon"></i> Blockly module
+                    </a>
+                    <a class="item" (click)="newModule()" data-content="Code powerful modules using Lua. Recommended for advanced users." data-variation="inverted">
+                        <i class="code icon"></i> Lua module
+                    </a>
                 </div>
             </div>
             <div style="margin-top:1rem">
@@ -184,9 +188,10 @@ export class Home {
 
     private initView() {
         setTimeout(() => {
-            $(this.elementRef.nativeElement).find('.ui.dropdown').dropdown({
+            $(this.elementRef.nativeElement).find('.ui.dropdown')                .dropdown({
                 action: 'hide'
             });
+            $(this.elementRef.nativeElement).find('[data-content]').popup();
         }, 100);
     }
 }
