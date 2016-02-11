@@ -11,7 +11,7 @@ const DEFAULT_PROGRAM = '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>';
     inputs: ['module'],
     styles: [`
 .ui.tab {
-    height: calc(100% - 11.5rem - 6px);
+    height: calc(100% - 11rem - 10px);
 }
 
 [ace-editor] {
