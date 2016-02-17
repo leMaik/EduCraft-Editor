@@ -21,6 +21,7 @@ export default {
     place_block: place_block,
     place_block_ahead: place_block_ahead,
     destroy_block: destroy_block,
+    destroy_block_below: destroy_block_below,
     place_torch: place_torch,
     plant_crop: plant_crop,
     shear: shear,
