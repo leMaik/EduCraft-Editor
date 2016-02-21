@@ -33,6 +33,11 @@ import {BlocklyModule} from "./module";
 .editor {
     height: calc(100% - 2rem + 2px);
 }
+
+svg {
+    width: 24px;
+    fill: white;
+}
 `],
     template: `
 <div class="ui grid" *ngIf="isLoggedIn">
@@ -93,7 +98,12 @@ import {BlocklyModule} from "./module";
     </h2>
     <form class="ui large form">
       <div class="ui stacked segment">
-        <div class="ui fluid large dark blue basic button" (click)="login('craftenforum')">Login via Craften Forum</div>
+        <div class="ui fluid large dark blue button" (click)="login('craftenforum')">
+            <i>
+                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 128 128" class="ui spaced image"><path d="M74.8 13L119 29.6v68.2L74.8 115z"/><path fill-rule="evenodd" d="M11.5 39.8l9.3-2v26H16v24.7l4.8 1V81l11 1.7v9.5l6.3 1.5V64h-6V35.4l13.5-3v21l-33.7 2.2zM65.8 0L0 24.4v78.3L65.8 128z"/></svg>
+            </i>
+            Login via Craften Forum
+        </div>
       </div>
 
       <div class="ui error message"></div>
