@@ -1,0 +1,6 @@
+.git
+.gitignore
+LICENSE
+docker-compose.yml
+client/node_modules
+server/node_modules
