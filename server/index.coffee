@@ -1,29 +1,31 @@
+config =
+  port: process.env.PORT or 3000
+  mongodb: if process.env.DB_PORT then process.env.DB_PORT.replace('tcp', 'mongodb') + '/educraft' else process.env.MONGODB
+
 express = require 'express'
 
 app = express()
 app.use express.static '../client'
 
-server = app.listen 3000, ->
+server = app.listen config.port, ->
   console.log "Listening on port #{server.address().port}"
 
-gracefulShutdown = ->
+mongoose = require 'mongoose'
+mongoose.connect config.mongodb
+#mongoose.connection.on 'open', (con) -> mongoose.connection.db.dropDatabase()
+models = require('./models/models')(mongoose)
+
+process.on 'SIGTERM', ->
   console.log 'Received kill signal, shutting down gracefully...'
   server.close ->
     console.log 'All remaining connections closed'
+    mongoose.connection.close()
     process.exit()
 
   setTimeout ->
     console.warn 'Could not close connections in time, force shut down'
-    process.exit()
-  , 1000
-
-process.on 'SIGTERM', gracefulShutdown
-process.on 'SIGINT', gracefulShutdown
-
-mongoose = require 'mongoose'
-mongoose.connect 'mongodb://localhost:27017/educraft'
-#mongoose.connection.on 'open', (con) -> mongoose.connection.db.dropDatabase()
-models = require('./models/models')(mongoose)
+    process.exit(1)
+  , 30 * 1000
 
 session = require 'express-session'
 passport = require 'passport'
