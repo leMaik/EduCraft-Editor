@@ -1,6 +1,13 @@
 config =
   port: process.env.PORT or 3000
   mongodb: if process.env.DB_PORT then process.env.DB_PORT.replace('tcp', 'mongodb') + '/educraft' else process.env.MONGODB
+  config:
+    apiUrl: process.env.API_URL
+    clientId: process.env.API_CLIENT_ID
+    clientSecret: process.env.API_CLIENT_SECRET
+    callbackUrl: process.env.API_CALLBACK_URL
+  session:
+    secret: process.env.API_SESSION_SECRET
 
 express = require 'express'
 
@@ -31,8 +38,6 @@ session = require 'express-session'
 passport = require 'passport'
 MongoStore = require('connect-mongo')(session)
 bcrypt = require 'bcrypt'
-
-config = require './config.json'
 
 BdApiStrategy = require('passport-bdapi').Strategy
 passport.use new BdApiStrategy {
