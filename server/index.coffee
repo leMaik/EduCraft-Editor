@@ -1,7 +1,7 @@
 config =
   port: process.env.PORT or 3000
   mongodb: if process.env.DB_PORT then process.env.DB_PORT.replace('tcp', 'mongodb') + '/educraft' else process.env.MONGODB
-  config:
+  oauth:
     apiUrl: process.env.API_URL
     clientId: process.env.API_CLIENT_ID
     clientSecret: process.env.API_CLIENT_SECRET
