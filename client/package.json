@@ -4,7 +4,7 @@
   "description": "Web editor for EduCraft.",
   "main": "index.html",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "tsc || true",
     "tsc:w": "tsc -w",
     "lite": "lite-server",
     "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",

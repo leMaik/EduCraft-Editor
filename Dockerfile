@@ -9,6 +9,7 @@ WORKDIR /usr/src/app/client
 COPY client/package.json /usr/src/app/client/
 RUN npm install
 COPY client /usr/src/app/client/
+RUN npm run tsc
 
 # Install server dependencies
 WORKDIR /usr/src/app/server
