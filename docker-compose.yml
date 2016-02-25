@@ -6,6 +6,11 @@ web:
     - db
   environment:
     - PORT=8080
+    - API_URL=https://forum.craften.de/api/index.php
+    - API_CLIENT_ID=educraft
+    - API_CLIENT_SECRET=secret
+    - API_CALLBACK_URL=http://localhost:8080/auth/craftenforum/callback
+    - API_SESSION_SECRET=secret
 db:
   image: mongo
   command: "--smallfiles --logpath=/dev/null"
