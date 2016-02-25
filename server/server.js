@@ -2,7 +2,7 @@
 
 const config = {
     port: process.env.PORT || 3000,
-    mongodb: process.env.DB_PORT ? process.env.DB_PORT.replace('tcp', 'mongodb') + '/educraft' : process.env.MONGODB,
+    mongodb: process.env.DB_PORT ? process.env.DB_PORT.replace('tcp', 'mongodb') + '/educraft' : process.env.MONGO_URL,
     oauth: {
         apiUrl: process.env.API_URL,
         clientId: process.env.API_CLIENT_ID,
