@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = (app, models) => {
-    app.use('/api', (req, res, next)=> {
+    app.use('/api', (req, res, next) => {
         if (req.user == null) {
             return res.status(401).end();
         } else {

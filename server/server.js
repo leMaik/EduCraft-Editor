@@ -19,43 +19,26 @@ mongoose.connect(config.mongodb);
 const models = require('./models/models')(mongoose);
 
 const passport = require('passport');
-passport.serializeUser((user, done) =>
-    done(null, user._id)
-);
-passport.deserializeUser((id, user) =>
-    models.User.findById(id)
-        .then(user=>done(null, user)
-            .then(null, err=>done(err, null)))
-);
+passport.serializeUser((user, done) => done(null, user._id));
+passport.deserializeUser((id, done) => {
+    return models.User.findById(id)
+        .then(user => done(null, user))
+        .then(null, err => done(err, null))
+});
 
 const express = require('express');
 const app = express();
 
-app.use(express.static('../client'));
-app.use(require('body-parser').json());
-app.use(require('./auth/craftenforum')(config.oauth, app, passport, models));
-require('./api')(app, models);
-
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
-app.use(session({
-    secret: config.session.secret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        path: '/',
-        httpOnly: true,
-        secure: false,
-        maxAge: null
-    },
-    store: new MongoStore({
-        mongooseConnection: mongoose.connection,
-        collection: 'sessions'
-    })
-}));
-
+app.use(require('./sessionstore')(config.session, mongoose.connection));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(require('body-parser').json());
+app.use(express.static('../client'));
+require('./api')(app, models);
+
+//authorization methods
+require('./auth/craftenforum')(config.oauth, app, passport, models);
 
 const server = app.listen(config.port, function () {
     console.log(`Listening on port ${this.address().port}`);

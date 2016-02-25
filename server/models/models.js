@@ -1,5 +1,5 @@
 module.exports = (mongoose) => {
     return {
-        User: require('./user')
+        User: require('./user')(mongoose)
     };
 };
