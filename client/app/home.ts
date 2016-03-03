@@ -169,10 +169,12 @@ export class Home {
                 this.module = module;
             });
         } else {
+            let blocklyModule = <BlocklyModule>this.module;
             this._moduleService.updateBlocklyModule(this.module.name, module.name, module.code, module.blockly).subscribe(module => {
-                this.module.name = module.name;
-                this.module.code = module.code;
-                this.module.lastModified = module.lastModified;
+                blocklyModule.name = module.name;
+                blocklyModule.blockly = module.blockly;
+                blocklyModule.code = module.code;
+                blocklyModule.lastModified = module.lastModified;
             });
         }
     }
@@ -198,7 +200,7 @@ export class Home {
 
     private initView() {
         setTimeout(() => {
-            $(this.elementRef.nativeElement).find('.ui.dropdown')                .dropdown({
+            $(this.elementRef.nativeElement).find('.ui.dropdown').dropdown({
                 action: 'hide'
             });
             $(this.elementRef.nativeElement).find('[data-content]').popup();

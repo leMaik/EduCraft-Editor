@@ -10,7 +10,7 @@ module.exports = (config, app, passport, models) => {
         clientSecret: config.clientSecret,
         callbackURL: config.callbackUrl
     }, (accessToken, refreshToken, profile, done) => {
-        models.User.findOne({oauthId: "cf-#{profile.user_id}"}, (err, user) => {
+        models.User.findOne({oauthId: `cf-${profile.user_id}`}, (err, user) => {
             if (user) {
                 user.username = profile.username;
                 user.save(err => done(err, user));
