@@ -6,6 +6,7 @@ import place_block from './place_block'
 import place_block_ahead from './place_block_ahead'
 import destroy_block from './destroy_block'
 import destroy_block_below from './destroy_block_below'
+import fell_tree from './fell_tree'
 import place_torch from './place_torch'
 import plant_crop from './plant_crop'
 import shear from './shear'
@@ -24,6 +25,7 @@ export default {
     destroy_block_below: destroy_block_below,
     place_torch: place_torch,
     plant_crop: plant_crop,
+    fell_tree: fell_tree,
     shear: shear,
     attack: attack,
 }

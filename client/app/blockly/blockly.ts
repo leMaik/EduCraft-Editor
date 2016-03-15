@@ -43,6 +43,7 @@ for (let name of Object.keys(EduCraftBlocks)) {
       <block type="destroy_block_below"></block>
       <block type="place_torch"></block>
       <block type="plant_crop"></block>
+      <block type="fell_tree"></block>
       <block type="shear"></block>
       <block type="attack"></block>
     </category>
