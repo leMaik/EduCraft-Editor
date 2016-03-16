@@ -17,8 +17,9 @@ module.exports = (app, models) => {
         const id = req.user.oauthId;
         if (id.indexOf('cf-') === 0) {
             res.redirect('https://forum.craften.de/data/avatars/m/0/' + id.substr(3) + '.jpg').end();
+        } else {
+            res.status(404).end();
         }
-        res.status(404).end();
     });
 
     app.get('/api/modules', (req, res)=> {
