@@ -3,7 +3,17 @@ export default  {
         init: function () {
             this.appendDummyInput()
                 .appendField("repeat")
-                .appendField(new Blockly.FieldDropdown([["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"]]), "n")
+                .appendField(new Blockly.FieldTextInput(2, (text) => {
+                    if (text === null) {
+                        return null;
+                    }
+                    text = String(text).replace(/O/ig, '0').replace(/,/g, '');
+                    let n = parseFloat(text || 0);
+                    if (isNaN(n) || n < 1) {
+                        return null;
+                    }
+                    return String(n);
+                }), "n")
                 .appendField("times");
             this.appendStatementInput("body")
                 .appendField("do");
