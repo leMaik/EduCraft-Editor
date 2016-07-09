@@ -24,7 +24,7 @@ const DEFAULT_PROGRAM = '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>';
     <div class="ui clearing segment">
         <div class="ui fluid labeled action input">
             <div class="ui basic label">
-                {{user.username}}/
+                @{{user.username}}/
             </div>
             <input type="text" placeholder="module-name" [(ngModel)]="name">
             <div class="ui icon button" (click)="save()" [ngClass]="{disabled: !modified}">
