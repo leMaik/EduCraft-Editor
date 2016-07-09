@@ -17,7 +17,7 @@ module.exports = (config, app, passport, models) => {
             }
             else {
                 models.User.create({
-                        oauthId: "cf-#{profile.user_id}",
+                        oauthId: `cf-${profile.user_id}`,
                         username: profile.username
                     })
                     .then(user => done(null, user))
